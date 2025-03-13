@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const connectDB = require('./config/db');
+const authRoutes = require('./routes/auth');
 require('dotenv').config();
 
 const app = express();
@@ -15,9 +16,7 @@ app.use(bodyParser.json());
 connectDB();
 
 // Routes
-app.get('/', (req, res) => {
-  res.send('Backend is running!');
-});
+app.use('/api/auth', authRoutes);
 
 // Démarrer le serveur
 app.listen(PORT, () => {

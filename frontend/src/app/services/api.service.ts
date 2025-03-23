@@ -6,7 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  private apiUrl = 'https://projetmean-fanomezantsoa-manantsoa.onrender.com';
+  // private apiUrl = 'https://projetmean-fanomezantsoa-manantsoa.onrender.com';
+  private apiUrl = 'http://localhost:5000/';
 
   constructor(private http: HttpClient) {}
 

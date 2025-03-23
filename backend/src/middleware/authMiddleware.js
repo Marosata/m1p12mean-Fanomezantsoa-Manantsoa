@@ -25,7 +25,7 @@ const isManager = (req, res, next) => {
     if (req.user && req.user.role === "manager") {
         next();
     } else {
-        res.status(403).json({ message: "Accès interdit : seuls les managers peuvent effectuer cette action." });
+        res.status(403).json({ message: "Accès interdit , vous devez être un administrateur." });
     }
 };
 

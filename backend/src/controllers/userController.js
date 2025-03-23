@@ -185,10 +185,10 @@ const getUserProfile = async (req, res) => {
 const getAllUser = async (req,res)=>{
     try {
         const users = await User.find();
-        console.log(res)
+        // console.log(res)
         res.json(users);
     } catch (error) {
-        console.error(error);
+        // console.error(error);
         res.status(500).json({ message: "Erreur serveur" });
     }
 }

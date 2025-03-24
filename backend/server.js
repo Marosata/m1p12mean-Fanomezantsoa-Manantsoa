@@ -15,7 +15,7 @@ app.get("/", (req, res) => res.json({ message: "API Running" }));
 
 // Importation des routes
 const authRoutes = require("./src/routes/authRoute");
-const rendezvousRoutes = require("./src/routes/rendezvousRoute");
+const rendezvousRoutes = require("./src/routes/rendezVousRoute");
 const reparationRoutes = require("./src/routes/reparationRoute");
 const employeRoutes = require("./src/routes/employeRoute");
 const paiementRoutes = require("./src/routes/paiementRoute");

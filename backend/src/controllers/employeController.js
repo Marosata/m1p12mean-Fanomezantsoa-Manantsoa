@@ -3,30 +3,26 @@ const User = require("../models/User");
 
 exports.createEmployee = async (req, res) => {
   try {
-    // Vérifier si l'utilisateur est authentifié et est un manager
     if (!req.user || req.user.role !== "manager") {
       return res.status(403).json({ message: "Accès interdit, vous devez être un manager." });
     }
 
     const { name, email } = req.body;
 
-    // Vérifier si l'utilisateur existe dans la table User
     const existingUser = await User.findOne({ email });
     if (!existingUser) {
       return res.status(400).json({ message: "L'utilisateur n'est pas inscrit en tant qu'utilisateur." });
     }
 
-    // Vérifier si l'utilisateur est déjà enregistré comme employé
     const existingEmployee = await Employee.findOne({ email });
     if (existingEmployee) {
       return res.status(400).json({ message: "Cet employé est déjà enregistré ." });
     }
 
-    // Créer un nouvel employé
     const employee = new Employee({
-      name: existingUser.name, // Utiliser le nom existant
+      name: existingUser.name,
       email: existingUser.email,
-      role: req.body.role || "mecanicien", // Rôle par défaut
+      role: req.body.role || "mecanicien", 
     });
 
     await employee.save();

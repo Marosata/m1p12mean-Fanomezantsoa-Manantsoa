@@ -33,7 +33,6 @@ exports.login = async (req, res) => {
 
 exports.logout = async (req, res )  => {
   if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
-    // Pour JWT, la déconnexion se gère généralement côté client (en supprimant le token)
     res.json({ message: "Déconnexion réussie" });
   }else{
     res.json({message :"Erreur"});

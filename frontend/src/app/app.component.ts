@@ -7,15 +7,12 @@ import { ApiService } from './services/api.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title(title: any) {
-    throw new Error('Method not implemented.');
-  }
   apiStatus: string = '';
 
   constructor(private apiService: ApiService) {}
 
   ngOnInit() {
-    this.apiService.getApiStatus().subscribe(response => {
+    this.apiService.getApiStatus().subscribe((response: { message: string; }) => {
       this.apiStatus = response.message; // Accéder à "message" du JSON
     });
   }

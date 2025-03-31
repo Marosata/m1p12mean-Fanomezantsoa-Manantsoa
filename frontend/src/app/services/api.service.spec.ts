@@ -1,16 +1,14 @@
-import { TestBed } from '@angular/core/testing';
+// src/app/services/api.service.ts
+import { Injectable } from '@angular/core';
 
-import { ApiService } from './api.service';
+@Injectable({
+  providedIn: 'root'
+})
+export class ApiService {
+  constructor() { }
 
-describe('ApiService', () => {
-  let service: ApiService;
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(ApiService);
-  });
-
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-});
+  // Ajoutez ici vos méthodes pour consommer vos API
+  getData() {
+    // Exemple de méthode
+  }
+}

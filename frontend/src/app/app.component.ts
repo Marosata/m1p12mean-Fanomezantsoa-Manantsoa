@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from './services/api.service';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -8,8 +8,9 @@ import { ApiService } from './services/api.service';
 })
 export class AppComponent implements OnInit {
   apiStatus: string = '';
+  apiService: any;
 
-  constructor(private apiService: ApiService) {}
+  constructor(private a: AuthService) {}
 
   ngOnInit() {
     this.apiService.getApiStatus().subscribe((response: { message: string; }) => {

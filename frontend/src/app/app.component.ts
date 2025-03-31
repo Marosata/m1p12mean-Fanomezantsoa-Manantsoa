@@ -1,19 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { ApiService } from './services/api.service';
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  template: `<h1>{{ apiStatus }}</h1>`,
-  styleUrls: ['./app.component.scss']
+  imports: [RouterOutlet],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit {
-  apiStatus: string = '';
-
-  constructor(private apiService: ApiService) {}
-
-  ngOnInit() {
-    this.apiService.getApiStatus().subscribe((response: { message: string; }) => {
-      this.apiStatus = response.message; // Accéder à "message" du JSON
-    });
-  }
+export class AppComponent {
+  title = 'frontend';
 }

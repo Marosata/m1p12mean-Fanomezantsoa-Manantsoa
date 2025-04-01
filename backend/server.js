@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   cookieSession({
     name: "garage-session",
-    secret: "$2y$10$tKovGS01FuBG7g./52jWwudJz/Guj5TCuu7BkD1Mgvh6QUJt/Uf86", // bcrypt (Raha vakiana dia garage)
+    secret: "$2y$10$tKovGS01FuBG7g./52jWwudJz/Guj5TCuu7BkD1Mgvh6QUJt/Uf86", // bcrypt ngenereko (Raha vakiana dia garage)
     httpOnly: true
   })
 );
@@ -26,8 +26,10 @@ const dbConfig = require("./src/config/db.config");
 const Role = db.role;
 
 
+// Ao am db.config.js no manova anle url de connexion
 db.mongoose
-  .connect(dbConfig.MongooseURI).then(() => {
+  .connect(dbConfig.MongooseURI) // Plus de deuxième paramètre
+  .then(() => {
     console.log("Connecté avec succès");
     initial();
   })
@@ -47,8 +49,8 @@ async function initial() {
     if (count === 0) {
       await Promise.all([
         new Role({ nom: "client" }).save(),
-        new Role({ nom: "mecanicien" }).save(),
-        new Role({ nom: "manager" }).save()
+        new Role({ nom: "responsable_atelier" }).save(),
+        new Role({ nom: "responsable_financier" }).save()
       ]);
 
       console.log("Rôles initiaux ajoutés avec succès");

@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   cookieSession({
     name: "garage-session",
-    secret: "$2y$10$tKovGS01FuBG7g./52jWwudJz/Guj5TCuu7BkD1Mgvh6QUJt/Uf86", // bcrypt ngenereko (Raha vakiana dia garage)
+    secret: "$2y$10$tKovGS01FuBG7g./52jWwudJz/Guj5TCuu7BkD1Mgvh6QUJt/Uf86", // bcrypt (Raha vakiana dia garage)
     httpOnly: true
   })
 );
@@ -26,11 +26,10 @@ const dbConfig = require("./src/config/db.config");
 const Role = db.role;
 
 
-// Ao am db.config.js no manova anle url de connexion
 db.mongoose
-  .connect(dbConfig.MongooseURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+  .connect(dbConfig.MongooseURI).then(() => {
+    console.log("Connecté avec succès");
+    initial();
   })
   .then(() => {
     console.log("Connecter avec succès");
@@ -41,41 +40,23 @@ db.mongoose
     process.exit();
   });
 
-function initial() { // Initialisation role any am base de donnee
-    Role.estimatedDocumentCount((err, count) => {
-      if (!err && count === 0) {
-        new Role({
-          nom: "client"
-        }).save(err => {
-          if (err) {
-            console.log("error", err);
-          }
-  
-          console.log("ajout 'client' au collection roles");
-        });
-  
-        new Role({
-          nom: "responsable_atelier"
-        }).save(err => {
-          if (err) {
-            console.log("error", err);
-          }
-  
-          console.log("ajout 'responsable_atelier' au collection roles ");
-        });
-  
-        new Role({
-          nom: "responsable_financier"
-        }).save(err => {
-          if (err) {
-            console.log("error", err);
-          }
-  
-          console.log("ajout 'responsable_financier' au collection roles ");
-        });
-      }
-    });
+async function initial() {
+  try {
+    const count = await Role.estimatedDocumentCount();
+    
+    if (count === 0) {
+      await Promise.all([
+        new Role({ nom: "client" }).save(),
+        new Role({ nom: "mecanicien" }).save(),
+        new Role({ nom: "manager" }).save()
+      ]);
+
+      console.log("Rôles initiaux ajoutés avec succès");
+    }
+  } catch (err) {
+    console.error("Erreur lors de l'initialisation", err);
   }
+}
   var allowCrossDomain = function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');

@@ -5,7 +5,6 @@ const vehicule = db.vehicule;
 const typeReparation = db.typeReparation;
 const moment = require('moment-timezone');
 exports.createReparation = (req, res) => {
-  //maka id anle vehicule kalo ra efa miexsiste ao 
   vehicule.findOne({ _id: req.body.vehicule }, (err, vehicule) => {
    
     if (err) {
@@ -15,7 +14,6 @@ exports.createReparation = (req, res) => {
     if (!vehicule) {
       return res.status(404).send({ message: "Vehicule not found" });
     }
-// dia efveo maka id anle typeReparation
     typeReparation.findOne({ _id: req.body.typeReparation }, (err, typeReparation) => {
       if (err) {
         return res.status(500).send({ message: err });
@@ -24,7 +22,6 @@ exports.createReparation = (req, res) => {
       if (!typeReparation) {
         return res.status(404).send({ message: "Type of Reparation not found" });
       }
-//dia miinsert amzay efveo 
       const newReparation = new Reparation({
         dateHeureDebut: req.body.dateHeureDebut,
         dateHeureFin: req.body.dateHeureFin,
@@ -44,7 +41,7 @@ exports.createReparation = (req, res) => {
     });
   });
 };
-exports.findDepotReparationParVoiture = (req, res) => { ///maka reparation par utilisateur
+exports.findDepotReparationParVoiture = (req, res) => { 
   console.log(req.params)
   Reparation.find({ vehicule: req.params.vehicule})
   .populate(["typeReparation","vehicule"])
@@ -58,7 +55,7 @@ exports.findDepotReparationParVoiture = (req, res) => { ///maka reparation par u
     }
   );
 };
-exports.findReparationById = (req, res) => { ///maka reparation par id
+exports.findReparationById = (req, res) => { 
   console.log(req.params)
   Reparation.find({ _id: req.params._id})
   .populate(["typeReparation","vehicule"])
@@ -72,7 +69,7 @@ exports.findReparationById = (req, res) => { ///maka reparation par id
     }
   );
 };
-exports.deleteReparation = (req, res) => {//delete reparation
+exports.deleteReparation = (req, res) => {
   Reparation.deleteOne({ _id: req.params._id })
   .then(() => {
   res.send({ message: "Reparation deleted successfully" });
@@ -81,7 +78,7 @@ exports.deleteReparation = (req, res) => {//delete reparation
   res.status(500).send({ message: "Error deleting reparation" });
   });
 };
-exports.listeVehiculeDepot = (req, res) => {//liste vehicule reparer par utilisateur
+exports.listeVehiculeDepot = (req, res) => {
   Reparation.find({ utilisateur: req.params.utilisateurId })
     .populate({
       path: "vehicule",
@@ -105,7 +102,7 @@ exports.listeVehiculeDepot = (req, res) => {//liste vehicule reparer par utilisa
       res.send(distinctVehicles);
     });
 };
-exports.listeDepotVoitureParVoiture = (req,res)=>{//par voiture
+exports.listeDepotVoitureParVoiture = (req,res)=>{
   Reparation.find({ utilisateur: req.params.utilisateurId , vehicule: req.params.vehicule })
   .populate(["typeReparation","vehicule"])
   .exec((err, Reparation) => {
@@ -118,7 +115,7 @@ exports.listeDepotVoitureParVoiture = (req,res)=>{//par voiture
     }
   );
 };
-exports.getReparationParVehicule= (req,res)=>{//les reparations par vehicule
+exports.getReparationParVehicule= (req,res)=>{
   Reparation.find({ vehicule: req.params.vehicule })
   .populate("typeReparation")
   .populate({

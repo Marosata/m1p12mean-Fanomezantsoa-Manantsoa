@@ -8,11 +8,14 @@ import { TypeReparationService } from '../Service/type-reparation.service';
 import { TypeReparation } from '../Model/TypeReparation';
 import { Reparation } from '../Model/Reparation';
 import { ReparationService } from '../Service/reparation.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-accueil',
   templateUrl: './accueil.component.html',
-  styleUrls: ['./accueil.component.css']
+  styleUrls: ['./accueil.component.css'],
+  standalone: true,
+  imports: [CommonModule]
 })
 export class AcceuilComponent implements OnInit{
  

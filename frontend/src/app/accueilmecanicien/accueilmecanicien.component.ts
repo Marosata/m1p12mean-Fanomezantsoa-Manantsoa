@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-accueilmecanicien',
-  templateUrl: './accueilmecanicien.h',
+  templateUrl: "./accueilmecanicien.component.html",
   styleUrls: ['./accueilmecanicien.component.css']
 })
 export class AcceuilatelierComponent {

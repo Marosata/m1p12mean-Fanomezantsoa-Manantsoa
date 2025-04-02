@@ -10,7 +10,7 @@ import { PaiementService } from '../Service/paiement.service';
 @Component({
   selector: 'app-acceuilfinancier',
   templateUrl: './acceuilfinancier.component.html',
-  styleUrls: ['./acceuilfinancier.component.css']
+  styleUrls: ['./acceuilfinancier.component.css'],
 })
 export class AcceuilfinancierComponent implements OnInit{
   nameFinancier: any;

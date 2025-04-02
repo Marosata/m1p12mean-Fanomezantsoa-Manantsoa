@@ -1,1 +1,55 @@
-<p>accueil works!</p>
+<app-header></app-header>
+<main id="main">
+    <section id="contact" class="contact">
+        <div class="container">
+  
+          <div class="section-title" data-aos="zoom-out">
+            <h2>Client {{this.NomUser}}</h2>
+            <p>Dépot Voiture</p>
+          </div>
+            <div class="section-title" data-aos="zoom-in-left">
+            
+              <h2>Services</h2><br>
+              <!-- <button  mat-raised-button type="submit" class="button" color="Link" (click)="listeTypeReparationChoisis()" style="margin-left: 10rem;">
+                <div fxLayout="row" fxLayoutGap="80px">
+                  <img src="../assets/images/listes.png" alt="Bouton d'export excel" width="40">
+                  <span> listes  Tyreparation choisis </span>
+                </div>
+              </button><br><br> -->
+              <p> Vous souhaitez reparer quoi ? </p>
+              <h5> 1) choisir la voiture  <img src="../assets/images/voiture.png" width="30"> que vous souhaitez faire reparer </h5>
+              <form (ngSubmit)="getListeDepotVoiture()">
+                <div class="container mt-3">
+                  <select class="form-select" [(ngModel)]="Vehicule._id"  name="vehicule" class="select" style="width:500px;height:50px;">
+                      <option *ngFor="let vehicule of Vehicules"  value="{{vehicule._id}}" >{{vehicule.nom}}</option>
+                         <!-- <input type="hidden" [(ngModel)]="vehicule._id" name="vehicule" value="{{vehicule._id}}"> -->
+                  </select>
+                </div><br>
+                <h5> 2) Cliquez sur l'icone sous forme reparation voiture  <img src="../assets/images/repare.png" width="30"> pour choisir les reparations que vous souhaitez faire . </h5><br>
+               
+                <div class="row">
+                  <div class="col-lg-3 col-md-6 d-flex align-items-stretch" *ngFor=" let typeReparation of TypeReparation | paginate: { itemsPerPage: 8, currentPage: pages,totalItems : totallength}">
+                    <div class="card" style="overflow: hidden;">
+                      <img src="../assets/images/{{typeReparation.image}}" height="200px"  class="card-img-top" alt="...">
+                      <div class="card-body">
+                        <h5 class="card-title" style="color:chocolate;font-weight:bold">{{typeReparation.nomTypeReparation}}</h5>
+                        <button mat-icon-button class="text-danger"  (click)="setVehiculeAndTypeReparationId(Vehicule._id, typeReparation._id)" type="submit">
+                          <img src="../assets/images/repare.png">
+                       </button>
+                        <p class="card-text" style="font-size:medium;font-weight: bold;">{{typeReparation.prixReparation}} € </p>
+                        <input type="hidden" [(ngModel)]=" typeReparation._id" name="typeReparation" value="{{typeReparation._id}}">
+                      
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            </form>
+            <br>
+            <div fxLayoutAlign="center center" class="pagination">
+              <pagination-controls (pageChange)="pages = $event"></pagination-controls>
+            </div> 
+          </div>
+          </div>  
+      </section><!-- End Contact Section -->
+<app-footer></app-footer>
+

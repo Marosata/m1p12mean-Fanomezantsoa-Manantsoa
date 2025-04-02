@@ -7,7 +7,7 @@ app.use(cors());
 var corsOptions = {
   origin: "*" // Cors ho an'ny côté front
 };
-
+ 
 app.use(cors(corsOptions));
 app.use(express.json());
 

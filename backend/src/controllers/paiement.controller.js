@@ -8,16 +8,6 @@ const finished = require('stream').finished;
 const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
 dotenv.config;
-// const multer = require('multer');
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, 'upload/pdf/');
-//   },
-//   filename: function (req, file, cb) {
-//     cb(null, file.originalname);
-//   }
-// });
-// const upload = multer({ storage: storage });
 
 
 exports.validerPaiement = (req, res) => {
@@ -105,45 +95,3 @@ exports.getAllPaiementValider = (req,res)=>{//par status "en attente"
           res.send(paiementsValider);
       });
 };
-
-// exports.sender = async (req, res) => {
-//   try {
-//     const { to, subject, text } = req.body;
-//     console.log(req.files);
-//     var transporter = nodemailer.createTransport({
-//       port:587,
-//       host:"smtp-mail.outlook.com",
-//       auth: {
-//         user: "senderPharmabot@outlook.fr",
-//         pass: "ravaka123456789"
-//       },
-//       tls: {
-//         rejectUnauthorized: false
-//       }
-//     });
-//     var mailOptions = {
-//         from: "senderPharmabot@outlook.fr",
-//         to: to, 
-//         subject: subject,
-//         text: text,
-//         attachments: req.files.map(file => {
-//             return {
-//                 filename: file.originalname,
-//                 path: file.path
-//             }
-//         })
-//     };
-  //   await  transporter.sendMail(mailOptions, function(error,info){
-  //     if (error) {
-  //       console.log(error);
-  //       res.status(500).send({ error });
-  //     } else {
-  //     console.log('Email sent: ' + info.response);
-  //     res.status(200).send({ message: 'Email sent: ' + info.response });
-  //     }
-  //     });
-  // } catch (err) {
-  // console.log(err);
-  // res.status(500).send({ err });
-  // }
-// }

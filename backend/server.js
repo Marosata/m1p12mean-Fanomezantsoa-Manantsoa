@@ -80,13 +80,13 @@ app.get("/", (req, res) => {
 });
 
 // route api
-require ('./src/routes/auth.routes');
-require ('./src/routes/paiement.routes');
-require ('./src/routes/reparation.routes');
-require ('./src/routes/role.routes');
-require ('./src/routes/typeReparation.routes');
-require ('./src/routes/utilisateur.routes');
-require ('./src/routes/vehicule.routes');
+require ('./src/routes/auth.routes')(app);
+require ('./src/routes/paiement.routes')(app);
+require ('./src/routes/reparation.routes')(app);
+require ('./src/routes/role.routes')(app);
+require ('./src/routes/typeReparation.routes')(app);
+require ('./src/routes/utilisateur.routes')(app);
+require ('./src/routes/vehicule.routes')(app);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

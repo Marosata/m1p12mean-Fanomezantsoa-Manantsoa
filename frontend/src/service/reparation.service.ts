@@ -8,14 +8,14 @@ import { Reparation } from "../app/models/reparation";
   providedIn: "root",
 })
 export class ReparationService {
-  private api = environment.apiUrl + "api/reparation";
+  private api = environment.apiUrl + "api";
 
   reparations = signal<Reparation[]>([]);
 
   constructor(private httpClient: HttpClient) {}
 
   getAllReparations(): Observable<Reparation[]> {
-    return this.httpClient.get<Reparation[]>(`${this.api}/findReparation`);
+    return this.httpClient.get<Reparation[]>(`${this.api}/reparation/findReparation`);
   }
 
   getReparationById(id: string): Observable<Reparation> {

@@ -1,18 +1,30 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
-import { TypeReparation } from '../Model/TypeReparation';
+import { Injectable, signal } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { environment } from "../environnement/environnement";
+import { TypeReparation } from "../models/type-reparation";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class TypeReparationService {
-  private baseUrl = environment.apiUrl;
-  constructor(private http:HttpClient){}
-  Url1= `${this.baseUrl}/typeReparation/findTypeReparation`;
+  private api = environment.apiUrl + "api";
 
-  getAllTypeReparation()
-  {
-    return this.http.get<TypeReparation[]>(this.Url1);
+  typeReparations = signal<TypeReparation[]>([]);
+
+  constructor(private httpClient: HttpClient) {}
+
+  getAllTypeReparation(): Observable<TypeReparation[]> {
+    var typerRepairs = this.httpClient.get<TypeReparation[]>(`${this.api}/typeReparation/findTypeReparation`);
+    console.log(typerRepairs)
+    return typerRepairs;
+  }
+
+  getTypeReparationById(id: string): Observable<TypeReparation> {
+    return this.httpClient.get<TypeReparation>(`${this.api}/typeReparation/findTypeReparationById/${id}`);
+  }
+
+  createTypeReparation(typeReparation: TypeReparation): Observable<TypeReparation> {
+    return this.httpClient.post<TypeReparation>(`${this.api}/typeReparation/createTypeReparation`, typeReparation);
   }
 }

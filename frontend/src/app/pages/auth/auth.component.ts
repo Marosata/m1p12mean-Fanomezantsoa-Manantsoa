@@ -210,7 +210,8 @@ export class AuthComponent {
   onSignin() {
     this.authService.signin(this.signinData).subscribe({
       next: (response) => {
-        alert("Connexion réussie : nom "+ response.nom+" email "+response.email);
+        console.log(response.token); // tsy mety 
+        alert("Connexion réussie : nom "+ response.user.nom+" email "+response.user.email);
         this.router.navigate(["/"]);
       },
       error: (error) => {
@@ -225,10 +226,12 @@ export class AuthComponent {
 
     this.authService.signup(this.signupData).subscribe({
       next: (response) => {
+        alert("Inscription réussie ")
         console.log("Inscription réussie :", response);
         this.selectedTab = "signin";
       },
       error: (error) => {
+        alert("Erreur !!!")
         console.error("Erreur lors de l'inscription :", error);
       },
     });

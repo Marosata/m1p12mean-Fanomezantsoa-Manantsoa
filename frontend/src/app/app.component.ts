@@ -1,20 +1,67 @@
 import { Component } from '@angular/core';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from "./pages/footer/footer.component";
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MatToolbarModule, MatButtonModule, CommonModule, FooterComponent, RouterModule],
+  imports: [
+    RouterOutlet,
+    MatToolbarModule,
+    MatButtonModule,
+    CommonModule,
+    FooterComponent,
+    RouterModule,
+    MatMenuModule,
+    MatIconModule
+  ],
   template: `
     <mat-toolbar color="primary" class="toolbar">
       <span class="brand">AutoCare</span>
       <nav class="nav-links">
         <a mat-button routerLink="/">Accueil</a>
-        <a mat-button routerLink="/inscription">Inscription ou Connexion</a>
+
+        <a mat-button 
+           *ngIf="isLoggedIn() && (isResponsableAtelier() || isResponsableFinancier())"
+           routerLink="/vehicules">
+          Véhicules
+        </a>
+
+        <a mat-button 
+           *ngIf="isLoggedIn() && isResponsableFinancier()"
+           routerLink="/stats">
+          Statistiques
+        </a>
+
+        <a mat-button 
+           *ngIf="isLoggedIn() && isClient()"
+           routerLink="/vehicule/create">
+          Déclarer un véhicule
+        </a>
+
+        <!-- Menu utilisateur -->
+        <div *ngIf="isLoggedIn(); else loginButton" class="user-menu">
+          <button mat-button [matMenuTriggerFor]="userMenu">
+            <mat-icon>account_circle</mat-icon>
+            {{ getUserName() }}
+          </button>
+          <mat-menu #userMenu="matMenu">
+            <button mat-menu-item (click)="logout()">
+              <mat-icon>logout</mat-icon>
+              Déconnexion
+            </button>
+          </mat-menu>
+        </div>
+
+        <ng-template #loginButton>
+          <a mat-button routerLink="/inscription">Connexion</a>
+        </ng-template>
       </nav>
     </mat-toolbar>
 
@@ -25,15 +72,7 @@ import { FooterComponent } from "./pages/footer/footer.component";
           Votre solution complète pour l'entretien automobile en ligne.<br>
           Prenez rendez-vous, comparez nos tarifs transparents et gérez vos réparations en toute simplicité.
         </p>
-        <p class="extra-text">
-          Découvrez nos services innovants et notre équipe d'experts dédiés à votre satisfaction.<br>
-          Laissez-vous guider par notre expertise et faites de votre véhicule une priorité.
-        </p>
       </div>
-      <!-- Éléments animés -->
-      <div class="floating-element element1"></div>
-      <div class="floating-element element2"></div>
-      <div class="floating-element element3"></div>
     </div>
 
     <main>
@@ -42,7 +81,6 @@ import { FooterComponent } from "./pages/footer/footer.component";
     <app-footer></app-footer>
   `,
   styles: [`
-    /* Style pour la toolbar */
     .toolbar {
       display: flex;
       justify-content: space-between;
@@ -54,25 +92,27 @@ import { FooterComponent } from "./pages/footer/footer.component";
       letter-spacing: 1px;
     }
     .nav-links {
-      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
     }
-    .nav-links a {
+    .user-menu {
       margin-left: 2rem;
-      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
     }
-
-    /* Style pour la section hero */
+    .user-menu button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
     .hero {
-      position: relative;
       background: #2c3e50;
       color: white;
       padding: 4rem 0;
       text-align: center;
-      overflow: hidden;
     }
     .hero-content {
-      position: relative;
-      z-index: 2;
       max-width: 800px;
       margin: 0 auto;
       padding: 0 1rem;
@@ -84,89 +124,55 @@ import { FooterComponent } from "./pages/footer/footer.component";
     .hero-text {
       font-size: 1.2rem;
       line-height: 1.6;
-      opacity: 0.9;
     }
-    .extra-text {
-      margin-top: 1.5rem;
-      font-size: 1.1rem;
-      font-style: italic;
-    }
-
-    /* Style pour le main */
     main {
       min-height: 500px;
       padding: 2rem 8%;
     }
 
-    /* Styles pour les éléments animés */
-    .floating-element {
-      position: absolute;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-      z-index: 1;
-      animation: float 8s ease-in-out infinite;
-    }
-    .element1 {
-      width: 50px;
-      height: 50px;
-      top: 10%;
-      left: 15%;
-      animation-duration: 10s;
-    }
-    .element2 {
-      width: 80px;
-      height: 80px;
-      top: 60%;
-      left: 70%;
-      animation-duration: 12s;
-    }
-    .element3 {
-      width: 40px;
-      height: 40px;
-      top: 40%;
-      left: 30%;
-      animation-duration: 8s;
-    }
-
-    /* Animation pour créer un mouvement aléatoire */
-    @keyframes float {
-      0% {
-        transform: translate(0, 0);
-      }
-      25% {
-        transform: translate(20px, -20px);
-      }
-      50% {
-        transform: translate(-20px, 20px);
-      }
-      75% {
-        transform: translate(15px, 15px);
-      }
-      100% {
-        transform: translate(0, 0);
-      }
-    }
-
-    /* Responsive */
     @media (max-width: 768px) {
       .toolbar {
-        padding: 0 2rem;
+        padding: 0 1rem;
       }
       .brand {
         font-size: 1.4rem;
       }
-      .nav-links a {
-        margin-left: 1rem;
-        font-size: 1rem;
+      .nav-links {
+        gap: 0.5rem;
       }
       h1 {
         font-size: 2rem;
       }
-      .hero-text, .extra-text {
-        font-size: 1rem;
-      }
     }
-  `]})
+  `]
+})
 export class AppComponent {
-  title = 'frontend';
+  constructor(
+    public authService: AuthService,
+    private router: Router
+  ) {}
+
+  isClient(): boolean {
+    return this.authService.hasRole('client');
+  }
+
+  isResponsableAtelier(): boolean {
+    return this.authService.hasRole('responsable_atelier');
+  }
+
+  isResponsableFinancier(): boolean {
+    return this.authService.hasRole('responsable_financier');
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.authService.getCurrentUser();
+  }
+
+  getUserName(): string {
+    return this.authService.getCurrentUser()?.nom || 'Compte';
+  }
+
+  logout(): void {
+    this.authService.signout();
+  }
 }

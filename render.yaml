@@ -1,0 +1,22 @@
+services:
+  - name: backend
+    type: web
+    runtime: node
+    repo: https://github.com/Marosata/m1p12mean-Fanomezantsoa-Manantsoa.git
+    branch: main
+    rootDir: backend      # Déploiement du backend à partir du dossier /backend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: MONGO_URI
+        value: mongodb://localhost:27017/your-db-name  # Exemple de variable d'environnement pour la base de données
+    plan: free
+  
+  - name: frontend
+    type: static
+    repo: https://github.com/Marosata/m1p12mean-Fanomezantsoa-Manantsoa.git
+    branch: main
+    rootDir: frontend     # Déploiement du frontend à partir du dossier /frontend
+    buildCommand: npm install && npm run build
+    publishPath: build    # Si c'est une application React ou Angular, le build est dans le dossier /build
+    plan: free

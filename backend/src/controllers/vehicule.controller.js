@@ -112,18 +112,30 @@ exports.findVehiculeReparationPayer = (req,res)=>{//listes voitures rehetra izay
     }
   );
 };
-exports.findVoitureTerminee = (req, res) => { ///maka voiture rehetra client izay status valide
-  console.log(req.params)
-  Vehicule.find({ status: 'terminee' },
-    (err, Vehicule) => {
+exports.findVoitureTerminee = (req, res) => {
+  Vehicule.find({ status: 'terminee' })
+    .populate("utilisateur")
+    .exec((err, vehicules) => {
       if (err) {
         res.status(500).send({ message: err });
         return;
       }
-      res.send(Vehicule);
-    }
-  ).populate("utilisateur")
+      res.send(vehicules);
+    });
 }
+ ///maka voiture rehetra client izay status valide
+exports.findVoitureTerminee = (req, res) => {
+  Vehicule.find({ status: 'terminee' })
+    .populate("utilisateur")
+    .exec((err, vehicules) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+      res.send(vehicules);
+    });
+}
+
 exports.findVoitureBondeSortieValider = (req, res) => { ///maka voiture rehetra client izay status valide
   console.log(req.params)
   Vehicule.find({ status: 'sortie valider' },
@@ -197,8 +209,10 @@ exports.findHistoriqueVehicule = (req, res) => { ///maka voiture rehetra client 
 }
 exports.stats = async (req, res) => {
   try {
-    const list = await Vehicule.find({ status: "terminee" ,status: "recuperer"});
-    const data = [];
+    const list = await Vehicule.find({ 
+      $or: [{ status: "terminee" }, { status: "recuperer" }] 
+    });
+        const data = [];
     list.forEach(car => {
       const vehicleName = car.nom;
       const timeArr = car.totalTempsReparation.split(",");

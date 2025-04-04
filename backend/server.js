@@ -5,7 +5,7 @@ const fileUpload = require('express-fileupload');
 const app = express();
 app.use(cors());
 var corsOptions = {
-  origin: "*" // Cors ho an'ny côté front
+  origin: "https://m1p12mean-fanomezantsoa-manantsoa-7gdklhd3o-marosatas-projects.vercel.app/Garage" // Cors ho an'ny côté front
 };
  
 app.use(cors(corsOptions));

@@ -1,0 +1,74 @@
+.note {
+    color: grey;
+    font-size: 12px;
+    margin-top: 1em;
+  }
+  h2, h3, p {
+    margin: 0;
+  }
+  .h-dashed {
+    border: 1px dashed black;
+    margin: 1em 0;
+  }
+  table {
+    margin-top: 2em;
+    width: 100%;
+    border-spacing: 0;
+  }
+  table thead {
+    background-color:#3d618e;
+  }
+  table thead th {
+    padding: 0.5em;
+    color: white;
+    text-align: left !important;
+  }
+  table tbody td {
+    border: 1px solid #eaeaea;
+    padding: 0.5em;
+  }
+  table .total td {
+    padding: 1em;
+  }
+  .card{
+    
+    box-shadow: 0 10px 10px rgba(0,0,0,.2);
+    margin-left: 10rem;
+    margin-top: 3rem;
+    transition: transform 0.5s;
+  }
+  .card:hover{
+   
+    transform: scale(1.1);
+    /*transform: rotatey(180deg);*/
+  }
+  @keyframes hover{
+    0%{
+        transform: scale(1);
+    }
+    100%{
+        transform: scale(1.1);
+    }
+    /* 0%{
+        transform: rotatey(0deg);
+    }
+    100%{
+        transform: rotatey(180deg);
+    } */
+  }
+  .evoyeur{
+    margin-left:30px;
+    margin-top:20px;
+  }
+  .img{
+    margin-left: 650px;
+    margin-top: -90px;
+    
+  }
+  .destinataire{
+    margin-left:30px;
+    margin-top:-80px;
+  }
+  .vehicule{
+    margin-left:30px;
+  }

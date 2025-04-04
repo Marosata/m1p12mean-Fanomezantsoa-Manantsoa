@@ -1,0 +1,40 @@
+<app-header></app-header>
+<br>
+<div class="row">
+    <div class="col-lg-9 col-md-8 d-flex align-items-stretch" >
+        <div class="card" style="overflow: hidden;">
+        <h4 class="mess">Nouveau Message</h4><br>
+            <form class="example-form"  [formGroup]="nomForm" (ngSubmit)="onSubmit()">
+                <mat-form-field class="example-full-width" appearance="fill"  class="fournisseur">
+                    <mat-label><img src='../assets/images/fournisseur.png' width="20"> Destinataire</mat-label>
+                    <input matInput placeholder="Exemple@gmail.com" formControlName="to">
+                </mat-form-field>
+                <br>
+                <mat-form-field class="example-full-width" appearance="fill"  class="fournisseur">
+                    <mat-label>Object</mat-label>
+                    <input matInput placeholder="" formControlName="subject">
+                </mat-form-field>
+                <mat-form-field class="example-full-width"  class="fournisseur">
+                    <img src='../assets/images/pencil.png' width="32">
+                    <textarea matInput placeholder="" formControlName="text" style="line-height: 100px !important;" ></textarea>
+                </mat-form-field>
+                    <br>
+                    <div class="fileUploadInput" >
+                    <h5  class="fournisseur" style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;"> ✨ Upload Fichier</h5>
+                    <input type="file"   (change)="onFileChange($event)" class="fournisseur"/>
+                    <button  class="bouton"><img src='../assets/images/i.png' width="36" ></button></div>
+                <br><br>
+                <button  mat-raised-button type="submit" class ="but" color="danger">
+                    <img src='../assets/images/send.png'>
+                    <span> Envoyer </span>
+                </button>
+                <mat-spinner mode="indeterminate" *ngIf="submitting" style="margin:0 auto;" [diameter]="70"></mat-spinner> 
+            </form>
+        <div fxLayoutAlign="flex-end" fxLayoutGap="14px">
+            <button mat-flat-button color="white" routerLink="/VehiculeReparationPayer"><img src="../assets/images/l.png" width="30" alt=""></button>
+        </div>
+        </div>
+    </div>
+</div>
+<br>
+<app-footer></app-footer>

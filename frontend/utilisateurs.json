@@ -1,0 +1,27 @@
+[{
+  "_id": {
+    "$oid": "63cfb883df3a0d383235b8a0"
+  },
+  "nom": "rakoto",
+  "email": "financier@gmail.com",
+  "mot_de_passe": "$2a$08$S7axV./bwFdPAZdi7bJaHuMOZoGhXmCdhzWVqr/qESA8H5Ww2Q1Fm",
+  "roles": [
+    {
+      "$oid": "63bfebd4937c3b90ae3869bd"
+    }
+  ],
+  "__v": 1
+},{
+  "_id": {
+    "$oid": "63cfbd7edf3a0d383235b8f1"
+  },
+  "nom": "Atelier",
+  "email": "atelier@gmail.com",
+  "mot_de_passe": "$2a$08$HOminBcBuLF2IWDXxsAUBetauwr2/ZDVx2LyEP.L1XE2GeuhqpC22",
+  "roles": [
+    {
+      "$oid": "63bfebd4937c3b90ae3869bc"
+    }
+  ],
+  "__v": 1
+}]

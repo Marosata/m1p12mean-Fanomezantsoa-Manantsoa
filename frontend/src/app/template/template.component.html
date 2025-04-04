@@ -1,0 +1,64 @@
+  <app-header></app-header>
+  <main id="main">
+    <!-- ======= About Section ======= -->
+    <section id="about" class="about">
+      <div class="container">
+
+        <div class="section-title" data-aos="zoom-out">
+          <h2> A PROPOS</h2>
+          <p>Qui somme nous?</p>
+        </div>
+
+        <div class="row content" data-aos="fade-up">
+          <div class="col-lg-3">
+            <img src="../assets/img/6.png" alt="" class="img-fluid" width="350px">
+          </div>
+          <div class="col-lg-9 pt-4 pt-lg-0">
+            <p>
+              Avec notre site, bénéficiez d’un service de réparation auto au meilleur tarif : en quelques clics, trouvez le bon garage à côté de chez vous, proche de votre lieu de travail ou idéalement situé sur votre lieu de vacances .
+            </p>
+            <ul>
+              <li><i class="ri-check-double-line"></i> reparation</li>
+              <li><i class="ri-check-double-line"></i> meilleur tarif avec prix abordable</li>
+              <li><i class="ri-check-double-line"></i> entretien</li>
+            </ul>
+            <p>
+              Nous vous proposons de réserver en toute confiance plus de 40 types d’interventions (révision et vidange, courroie de distribution, amortisseurs, échappement, batterie, freins, parallélisme…) pour l’entretien courant de votre véhicule quel que soit le constructeur auto.
+              Essayez dès maintenant notre comparateur de garages automobiles pour économiser sur votre budget .
+                </p>
+                <a href="#" class="btn-learn-more">plus d'informations</a>
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End About Section -->
+
+    <section id="team" class="team">
+      <div class="container">
+        <div class="section-title" data-aos="zoom-out">
+          <h2>Reparation</h2>
+          <p>LISTES DE NOS SERVICES</p>
+        </div>
+        <div class="row">
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch" *ngFor=" let typeReparation of TypeReparation| paginate: { itemsPerPage: 8, currentPage: pages,totalItems : totallength}">
+            <div class="card" style="overflow: hidden; height: 470px;">
+              <img src="../assets/images/{{typeReparation.image}}" height="200px"  class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title" style="color:chocolate;font-weight:bold">{{typeReparation.nomTypeReparation}}</h5>
+                <button mat-icon-button class="text-danger" (click)="depotVoiture()">
+                  <img src="../assets/images/repare.png">
+               </button>
+                <p class="card-text" style="font-size:medium;font-weight: bold;">{{typeReparation.description}} </p>
+                <p class="card-text" style="font-size:medium;font-weight: bold;color:indianred">{{typeReparation.prixReparation}} € </p>
+              </div>
+            </div>
+          </div>
+      </div>
+      <br>
+      <div fxLayoutAlign="center center">
+        <pagination-controls (pageChange)="pages = $event"></pagination-controls>
+       </div> 
+      </div>
+    </section><!-- End Team Section -->
+
+  <app-footer></app-footer>

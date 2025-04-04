@@ -1,0 +1,21 @@
+<app-header></app-header>
+<div class="section-title" data-aos="zoom-out" style="margin-left:200px;margin-top: 30px;">
+  <h2>RESPONSABLE FINANCIER</h2>
+  <p>Temps de réparation moyen pour une voiture</p>
+</div>
+<div id="chart">
+    <apx-chart
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [dataLabels]="chartOptions.dataLabels"
+      [plotOptions]="chartOptions.plotOptions"
+      [yaxis]="chartOptions.yaxis"
+      [xaxis]="chartOptions.xaxis"
+      [legend]="chartOptions.legend"
+      [colors]="chartOptions.colors"
+      [grid]="chartOptions.grid"
+    ></apx-chart>
+  </div>
+
+<app-footer></app-footer>
+  

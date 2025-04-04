@@ -1,0 +1,94 @@
+<p>bondesortie works!</p>
+@ -0,0 +1,86 @@
+<app-header></app-header>
+<section id="team" class="team">
+  <div class="container">
+    <div class="section-title" data-aos="zoom-out">
+      <h2>Bon de sortie</h2>
+    </div>
+    <div class="row">
+      <div class="col-lg-10 col-md-8 d-flex align-items-stretch" >
+        <div class="card" style="overflow: hidden;">
+          <div id="print" #pdf>
+            <div>
+                <div fxLayout="row">
+                  <div fxFlex="1 1 100%" class="facturation-sender">
+                    <div class="evoyeur">
+                        <h3 style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">BON DE SORTIE</h3>
+                        <p>Antananarivo 101, Madagascar</p>
+                      </div>
+                  </div>
+                  <div class="img">
+                    <img src="../assets/images/g.webp" width="200" alt="">
+                  </div>
+                </div>
+                <div class="destinataire">
+                  <h5 style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">DESTINATAIRE</h5>
+                  <p>NOM : {{this.AllReparation[0].vehicule.utilisateur.nom}}</p>
+                  <p>email : {{this.AllReparation[0].vehicule.utilisateur.email}}</p>
+                </div><br>
+                <div class="vehicule">
+                  <h5 style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">INFOS VEHICULES</h5>
+                  <p>NOM VEHICULE : {{this.AllReparation[0].vehicule.nom}}</p>
+                  <p>TYPE : {{this.AllReparation[0].vehicule.type}}</p>
+                  <p>immatriculation : {{this.AllReparation[0].vehicule.immatriculation}}</p><br>
+                </div>
+              </div>
+              <h5  style=" margin-left:30px;font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">LISTES DES REPARATIONS</h5>
+              <table>
+                <thead>
+                <th>nom TypeReparation</th>
+                <th>description</th>
+                <th>Temps reparations</th>
+                <th>prix</th>
+                </thead>
+                <tbody>
+                <tr *ngFor="let list of AllReparation">
+                  <td style="color:coral">{{list.typeReparation.nomTypeReparation}}</td>
+                  <td>{{list.typeReparation.description}}</td>
+                  <td>{{list.tempsReparation}}</td>
+                  <td>{{list.typeReparation.prixReparation}} €</td>
+                </tr>
+                </tbody>
+                <tfoot>
+                </tfoot>
+              </table>
+              <br>
+              <div class="vehicule">
+                <h5 style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">REPARATIONS</h5>
+                <p>DATE HEURE DEBUT  : {{this.AllReparation[0].dateHeureDebut}}</p>
+                <p>DATE HEURE FIN  : {{this.AllReparation[0].vehicule.DateHeureFin}}</p>
+                <p>TEMPS REPARATION : {{this.AllReparation[0].vehicule.totalTempsReparation}}</p>
+                <p>immatriculation : {{this.AllReparation[0].vehicule.immatriculation}}</p><br>
+              </div>
+              <div fxLayout="column" fxLayoutGap="28px" fxLayoutAlign="center flex-end" class="text-right only-desktop">
+                <h4 style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;margin-left:620px;" >Total payer : {{this.totalPrice}} €</h4>
+              </div>
+              <br>
+              <div fxLayoutAlign="flex-end" fxLayoutGap="14px" style="margin-left: 750px;">
+                <button mat-icon-button
+                        class="bg-dark only-desktop"
+                        printSectionId="print"
+                        ngxPrint
+                        [useExistingCss]="true"
+                        [printStyle]="{
+                          body: {
+                            width: '555px'
+                          },
+                          '.only-mobile': {
+                            display: 'none !important'
+                          }
+                        }"
+                ><img src="../assets/images/imprimante.png" width="250">
+                  <!-- <material-icon name="print"></material-icon> -->
+                </button>
+              </div>
+              <button mat-flat-button color="white" mat-dialog-close routerLink="/listesvehiculesterminee"><img src="../assets/images/l.png" width="30" alt=""></button>
+            </div>
+        </div>
+      </div>
+  </div>
+  <br>
+  </div>
+</section><!-- End Team Section -->
+    <app-footer></app-footer>

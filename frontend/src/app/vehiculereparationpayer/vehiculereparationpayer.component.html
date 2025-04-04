@@ -1,0 +1,32 @@
+<app-header></app-header>
+<section id="pricing" class="pricing">
+    <div class="container">
+      <div class="section-title" data-aos="zoom-out">
+        <h2>Responsable financier</h2>
+        <p>Listes des véhicules à réparation payer</p>
+      </div>
+      <div class="col-lg-12">
+      <div class="row">
+        <div class="col-lg-3 col-md-6 d-flex align-items-stretch" *ngFor=" let v of vehiculeValide | paginate: { itemsPerPage: 8, currentPage: pages,totalItems : totallength}">
+          <div class="card" style="overflow: hidden;">
+            <img [src]="v.image"  height="200px"  class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title" style="color:chocolate;font-weight:bold">{{v.nom}}</h5>
+              <p class="card-text" style="font-size:medium;font-weight: bold;">{{v.immatriculation}} </p>
+              <p class="card-text" style="font-size:medium;font-weight: bold;">Nom Client : {{v.utilisateur.nom}} </p>
+              <p class="card-text" style="font-size:medium;font-weight: bold;">email : {{v.utilisateur.email}} </p>
+              <p class="card-text" style="font-size:medium;font-weight: bold;color:goldenrod">TOTAL PAYER : {{v.totalPrixReparation}} €</p>
+              <button class="btn btn-sucess" routerLink="/pdfDetails/{{v._id}}"  type="submit">voir PDF </button>
+            </div>
+          </div>
+        </div>
+        
+    </div><br>
+    <div fxLayoutAlign="center center" class="pagination">
+      <pagination-controls (pageChange)="pages = $event"></pagination-controls>
+     </div>
+  </div>
+  
+  </div>
+  </section>      
+<app-footer></app-footer>

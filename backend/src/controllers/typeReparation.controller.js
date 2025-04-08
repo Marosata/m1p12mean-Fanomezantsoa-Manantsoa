@@ -10,35 +10,25 @@ exports.findTypeReparation = async (req, res) => {
   }
 };
 
-exports.createTypeReparation = (req, res) => {
-  const typeRepare = new TypeReparation({
-    nomTypeReparation: req.body.nomTypeReparation,
-    description: req.body.description,
-    image: req.body.image,
-    prixReparation: req.body.prixReparation,
-  });
-
-  typeRepare.save((err, typeReparation) => {
-    ///miinsert eto
-    if (err) {
-      res.status(500).send({ message: err });
-      return;
-    }
-
-    res.send({
-      message: "TypeReparation was created successfully",
-      typeReparation,
+exports.createTypeReparation = async (req, res) => {
+  try {
+    const typeRepare = new TypeReparation(req.body);
+    const savedType = await typeRepare.save();
+    res.send({ 
+      message: "Type de réparation créé avec succès",
+      typeReparation: savedType 
     });
-  });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
 };
-exports.findTypeReparationById = (req, res) => {
-  ///maka typeReparation By id
-  console.log(req.params.nomTypeReparation);
-  TypeReparation.find({ _id: req.params._id }, (err, TypeReparation) => {
-    if (err) {
-      res.status(500).send({ message: err });
-      return;
-    }
-    res.send(TypeReparation);
-  });
+
+exports.findTypeReparationById = async (req, res) => {
+  try {
+    const type = await TypeReparation.findById(req.params._id);
+    if (!type) return res.status(404).send({ message: "Type non trouvé" });
+    res.send(type);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
 };

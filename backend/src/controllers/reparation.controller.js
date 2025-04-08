@@ -4,46 +4,57 @@ const Reparation = db.reparation;
 const vehicule = db.vehicule;
 const typeReparation = db.typeReparation;
 const moment = require("moment-timezone");
-exports.createReparation = (req, res) => {
-  vehicule.findOne({ _id: req.body.vehicule }, (err, vehicule) => {
-    if (err) {
-      return res.status(500).send({ message: err });
-    }
+exports.createReparation = async (req, res) => {
+  try {
+    const vehiculeFound = await Vehicule.findById(req.body.vehicule);
+    if (!vehiculeFound) return res.status(404).send({ message: "Véhicule non trouvé" });
 
-    if (!vehicule) {
-      return res.status(404).send({ message: "Vehicule not found" });
-    }
-    typeReparation.findOne(
-      { _id: req.body.typeReparation },
-      (err, typeReparation) => {
-        if (err) {
-          return res.status(500).send({ message: err });
+    const typeReparationFound = await TypeReparation.findById(req.body.typeReparation);
+    if (!typeReparationFound) return res.status(404).send({ message: "Type de réparation non trouvé" });
+
+    const newReparation = new Reparation({
+      ...req.body,
+      vehicule: vehiculeFound._id,
+      typeReparation: typeReparationFound._id
+    });
+
+    await newReparation.save();
+    res.send({ message: "Réparation créée avec succès" });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+exports.updateOneReparationTerminee = async (req, res) => {
+  try {
+    const reparation = await Reparation.findById(req.params._id);
+    if (!reparation) return res.status(404).send({ message: "Réparation non trouvée" });
+
+    const dateHeureFin = new Date().toLocaleString("fr-FR", { timeZone: "Indian/Antananarivo" });
+    
+    // Calcul de la durée
+    const start = moment(reparation.dateHeureDebut, "DD/MM/YYYY HH:mm:ss");
+    const end = moment(dateHeureFin, "DD/MM/YYYY HH:mm:ss");
+    const duration = moment.duration(end.diff(start));
+
+    const tempsReparation = 
+      `${duration.days()}j,${duration.hours()}h,${duration.minutes()}mn,${duration.seconds()}s`;
+
+    await Reparation.updateOne(
+      { _id: req.params._id },
+      { 
+        $set: { 
+          dateHeureFin,
+          tempsReparation,
+          statusUneReparation: "terminee" 
         }
-
-        if (!typeReparation) {
-          return res
-            .status(404)
-            .send({ message: "Type of Reparation not found" });
-        }
-        const newReparation = new Reparation({
-          dateHeureDebut: req.body.dateHeureDebut,
-          dateHeureFin: req.body.dateHeureFin,
-          tempsReparation: req.body.statusUneReparation,
-          statusUneReparation: req.body.statusUneReparation,
-          vehicule: vehicule._id,
-          typeReparation: typeReparation._id,
-        });
-
-        newReparation.save((err) => {
-          if (err) {
-            return res.status(500).send({ message: err });
-          }
-          console.log("new" + newReparation);
-          res.send({ message: "Reparation created successfully" });
-        });
       }
     );
-  });
+
+    res.send({ message: "Statut terminé mis à jour" });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
 };
 exports.findDepotReparationParVoiture = (req, res) => {
   console.log(req.params);
@@ -180,95 +191,6 @@ exports.updateOneReparationEncours = (req, res) => {
     );
   });
 };
-exports.updateOneReparationTerminee = (req, res) => {
-  Reparation.findOne({ _id: req.params._id }, (err, reparation) => {
-    if (err) {
-      return res.status(500).send({ message: err });
-    }
-    if (!reparation) {
-      return res.status(404).send({ message: "Reparation not found" });
-    }
-    if (reparation.statusUneReparation === "terminee") {
-      return res
-        .status(400)
-        .send({ message: "Reparation is already 'terminee'" });
-    }
-    const dateHeureFin = new Date().toLocaleString("fr-FR", {
-      timeZone: "Indian/Antananarivo",
-    });
-    Reparation.updateOne(
-      { _id: req.params._id },
-      { $set: { dateHeureFin } },
-      function (err) {
-        if (err) {
-          return res.status(500).send({ message: err });
-        }
-      }
-    );
-    Reparation.findOne({ _id: req.params._id }, (err, updatedReparation) => {
-      if (err) {
-        return res.status(500).send({ message: err });
-      }
-      const dateHeureDebut = moment(
-        updatedReparation.dateHeureDebut,
-        "DD/MM/YYYY HH:mm:ss"
-      ).toDate();
-      const dateHeureFins = moment(
-        dateHeureFin,
-        "DD/MM/YYYY HH:mm:ss"
-      ).toDate();
-
-      const duration = dateHeureFins - dateHeureDebut;
-
-      console.log(dateHeureDebut);
-      console.log(dateHeureFins);
-      console.log(duration);
-
-      const diffDays = Math.floor(duration / (1000 * 60 * 60 * 24));
-      const diffhours = Math.floor(
-        (duration % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-      );
-      const diffminutes = Math.floor(
-        (duration % (1000 * 60 * 60)) / (1000 * 60)
-      );
-      const diffseconds = Math.floor((duration % (1000 * 60)) / 1000);
-
-      // update tempsReparation
-      Reparation.updateOne(
-        { _id: req.params._id },
-        {
-          $set: {
-            tempsReparation:
-              diffDays +
-              "j," +
-              diffhours +
-              "h," +
-              diffminutes +
-              "mn," +
-              diffseconds +
-              "s",
-          },
-        },
-        (err) => {
-          if (err) {
-            return res.status(500).send({ message: err });
-          }
-          Reparation.updateOne(
-            { _id: req.params._id },
-            { $set: { statusUneReparation: "terminee" } },
-            (err) => {
-              if (err) {
-                return res.status(500).send({ message: err });
-              }
-              return res.send({ message: "status terminée" });
-            }
-          );
-        }
-      );
-    });
-  });
-};
-
 exports.getReparationAFaire = (req, res) => {
   //les reparations par vehicule
   Reparation.find({

@@ -6,8 +6,7 @@ const app = express();
 app.use(cors());
 var corsOptions = {
   origin: "https://m1p12mean-fanomezantsoa-manantsoa-7gdklhd3o-marosatas-projects.vercel.app/Garage", // Cors ho an'ny côté front
-  methods: 'GET,POST,PUT,DELETE',
-  allowedHeaders: 'Content-Type,Authorization'
+  credentials: true 
 };
  
 app.use(cors(corsOptions));

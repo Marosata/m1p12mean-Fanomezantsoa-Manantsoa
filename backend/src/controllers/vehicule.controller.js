@@ -25,68 +25,36 @@ let streamUpload = (file) => {
 exports.createVehicule = async (req, res) => {
   try {
     const file = req.file;
-    let result = await streamUpload(file);
-    const utilisateurId = req.body.utilisateurId;
-    utilisateur.findOne({ _id: utilisateurId }, (err, utilisateur) => {
-      if (err) {
-        res.status(500).send({ message: err });
-        return;
-      }
-      if (!utilisateur) {
-        res.status(404).send({ message: "Utilisateur not found" });
-        return;
-      }
-      const vehicule = new Vehicule({
-        nom: req.body.nom,
-        type: req.body.type,
-        image: result.url,
-        immatriculation: req.body.immatriculation,
-        utilisateur: utilisateurId,
-      });
-      vehicule.save((err, vehicule) => {
-        if (err) {
-          res.status(500).send({ message: err });
-          return;
-        }
-        res.send({ message: "Vehicule was saved successfully!" });
-      });
+    const result = await streamUpload(file);
+
+    const utilisateurFound = await utilisateur.findById(req.body.utilisateurId);
+    if (!utilisateurFound)
+      return res.status(404).send({ message: "Utilisateur non trouvé" });
+
+    const newVehicule = new Vehicule({
+      ...req.body,
+      image: result.url,
+      utilisateur: req.body.utilisateurId,
     });
-  } catch (error) {
-    res.status(500).send({ message: error.message });
+
+    await newVehicule.save();
+    res.send({ message: "Véhicule enregistré avec succès!" });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
   }
-  // if (!image) {
-  //   res.status(400).send({ message: "No image provided" });
-  //   return;
-  // }
-  // cloudinary.uploader.upload(image.path, (error, result) => {
-  // if (error) {
-  //   res.status(400).send({ message: error.message });
-  //   return;
-  // }
-  // try {
-
-  //   } catch (error) {
-  //     res.status(500).send({ message: error.message });
-  //   }
-  // });
 };
 
-exports.findVoitureClient = (req, res) => {
-  ///maka voiture rehetra client izay niinserena
-  console.log(req.params);
-  Vehicule.find(
-    { status: "non valider", utilisateur: req.params.utilisateurId },
-    (err, Vehicule) => {
-      console.log(Vehicule);
-      if (err) {
-        res.status(500).send({ message: err });
-        return;
-      }
-      res.send(Vehicule);
-    }
-  );
+exports.findVoitureClient = async (req, res) => {
+  try {
+    const vehicules = await Vehicule.find({
+      status: "non valider",
+      utilisateur: req.params.utilisateurId,
+    });
+    res.send(vehicules);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
 };
-
 exports.findVoitureValide = (req, res) => {
   ///maka voiture rehetra client izay status valide
   console.log(req.params);

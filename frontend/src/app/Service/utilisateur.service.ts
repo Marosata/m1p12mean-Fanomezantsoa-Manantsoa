@@ -9,7 +9,7 @@ import { Utilisateur } from './../Model/Utilisateur';
 export class UtilisateurService {
   private baseUrl = environment.apiUrl;
   constructor(private http:HttpClient){}
-  Url1= `${this.baseUrl}/auth/signup`;
+  Url1= `${this.baseUrl}/api/auth/signup`;
 
   creationUtilisateur(utilisateur: Utilisateur)
   {

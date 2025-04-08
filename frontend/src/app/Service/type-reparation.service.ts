@@ -9,7 +9,7 @@ import { TypeReparation } from '../Model/TypeReparation';
 export class TypeReparationService {
   private baseUrl = environment.apiUrl;
   constructor(private http:HttpClient){}
-  Url1= `${this.baseUrl}/typeReparation/findTypeReparation`;
+  Url1= `${this.baseUrl}/api/typeReparation/findTypeReparation`;
 
   getAllTypeReparation()
   {

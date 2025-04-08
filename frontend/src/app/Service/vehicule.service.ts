@@ -10,14 +10,14 @@ import { Vehicule } from '../Model/vehicule';
 export class VehiculeService {
    private baseUrl = environment.apiUrl;
   constructor(private http:HttpClient){}
-  Url1= `${this.baseUrl}/vehicule/findVehiculeReparationPayer`;
-  Url2=  `${this.baseUrl}/vehicule/findVoitureTerminee`;
-  Url3=  `${this.baseUrl}/vehicule/updateStatusVehicule`;
-  Url4=  `${this.baseUrl}/vehicule/findVoitureBondeSortieValider`;
-  url5=  `${this.baseUrl}/vehicule/findVehiculeRecuperer`;
-  url6= `${this.baseUrl}/vehicule/updateStatusVehiculeRecuperer`;
-  url7= `${this.baseUrl}/vehicule/findHistoriqueVehicule`;
-  url8= `${this.baseUrl}/vehicule/stats`;
+  Url1= `${this.baseUrl}/api/vehicule/findVehiculeReparationPayer`;
+  Url2=  `${this.baseUrl}/api/vehicule/findVoitureTerminee`;
+  Url3=  `${this.baseUrl}/api/vehicule/updateStatusVehicule`;
+  Url4=  `${this.baseUrl}/api/vehicule/findVoitureBondeSortieValider`;
+  url5=  `${this.baseUrl}/api/vehicule/findVehiculeRecuperer`;
+  url6= `${this.baseUrl}/api/vehicule/updateStatusVehiculeRecuperer`;
+  url7= `${this.baseUrl}/api/vehicule/findHistoriqueVehicule`;
+  url8= `${this.baseUrl}/api/vehicule/stats`;
 
   getVehiculeReparationPayer()
   {

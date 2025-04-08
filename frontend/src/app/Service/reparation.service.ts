@@ -10,20 +10,20 @@ import { Vehicule } from '../Model/vehicule';
 export class ReparationService {
   private baseUrl = environment.apiUrl;
   constructor(private http:HttpClient) { }
-  Url1= `${this.baseUrl}/reparation/createReparation`;
-  Url2= `${this.baseUrl}/reparation/findDepotReparationParVoiture`;
-  url3= `${this.baseUrl}/reparation/listeVehiculeDepot`;
-  url4= `${this.baseUrl}/reparation/getReparationParVehicule`;
-  url5= `${this.baseUrl}/reparation/updateOneReparationEncours`;
-  url6= `${this.baseUrl}/reparation/getReparationAFaire`;
-  url7= `${this.baseUrl}/reparation/getReparationEnCours`;
-  url8= `${this.baseUrl}/reparation/getReparationTerminee`;
-  url9= `${this.baseUrl}/reparation/updateOneReparationTerminee`;
-  url10= `${this.baseUrl}/reparation/getReparationavancement`;
-  url11= `${this.baseUrl}/reparation/updateVehiculeTerminee`;
-  url12= `${this.baseUrl}/reparation/getFactureReparationParVoiture`;
-  url13= `${this.baseUrl}/reparation/getBondeSortieParVoiture`;
-  url14= `${this.baseUrl}/reparation/getHistoriqueReparation`;
+  Url1= `${this.baseUrl}/api/reparation/createReparation`;
+  Url2= `${this.baseUrl}/api/reparation/findDepotReparationParVoiture`;
+  url3= `${this.baseUrl}/api/reparation/listeVehiculeDepot`;
+  url4= `${this.baseUrl}/api/reparation/getReparationParVehicule`;
+  url5= `${this.baseUrl}/api/reparation/updateOneReparationEncours`;
+  url6= `${this.baseUrl}/api/reparation/getReparationAFaire`;
+  url7= `${this.baseUrl}/api/reparation/getReparationEnCours`;
+  url8= `${this.baseUrl}/api/reparation/getReparationTerminee`;
+  url9= `${this.baseUrl}/api/reparation/updateOneReparationTerminee`;
+  url10= `${this.baseUrl}/api/reparation/getReparationavancement`;
+  url11= `${this.baseUrl}/api/reparation/updateVehiculeTerminee`;
+  url12= `${this.baseUrl}/api/reparation/getFactureReparationParVoiture`;
+  url13= `${this.baseUrl}/api/reparation/getBondeSortieParVoiture`;
+  url14= `${this.baseUrl}/api/reparation/getHistoriqueReparation`;
 
   creationReparation(reparation: Reparation)
   {

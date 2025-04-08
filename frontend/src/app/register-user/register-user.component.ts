@@ -27,12 +27,12 @@ export class RegisterUserComponent implements AfterViewInit {
   constructor(private _snackBar: MatSnackBar,private roleservice: RoleServiceService,private utilisateurservice: UtilisateurService,private router: Router,private loginservice: LoginService) { }
   ngAfterViewInit(): void { 
     this.listRole();
-    this.nomFinancier="rakoto";
-    this.motdepasseFinancier="12345678";
-    this.nomAtelier="Atelier";
-    this.motdepasseAtelier="aaaaaaaa";
-    this.Utilisateur.nom="Utilisateur";
-    this.Utilisateur.mot_de_passe="123456789";
+    this.nomFinancier="Fano Administrateur";
+    this.motdepasseFinancier="123456";
+    this.nomAtelier="Fano Mecanicien";
+    this.motdepasseAtelier="123456";
+    this.Utilisateur.nom="Fano Client";
+    this.Utilisateur.mot_de_passe="123456";
   }
   listRole(): void{// findRole
     this. roleservice.getAllRole()
@@ -146,7 +146,6 @@ export class RegisterUserComponent implements AfterViewInit {
     this.loginservice.loginUtilisateur(this.nomAtelier,this.motdepasseAtelier)
    .subscribe(
      (data:string) => {
-       console.log(data);
        const d=JSON.parse(data);
        localStorage.setItem('idUser',d.id);
        localStorage.setItem('NomUser',d.nom);

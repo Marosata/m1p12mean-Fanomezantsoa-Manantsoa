@@ -10,10 +10,10 @@ import { environment } from 'src/environments/environment';
 export class PaiementService {
   private baseUrl = environment.apiUrl;
   constructor(private http: HttpClient) { }
-  UrlDepot= `${this.baseUrl}/paiement/validerPaiement`;
-  url2=`${this.baseUrl}/paiement/findVehiculeEnAttente`;
-  Url3=`${this.baseUrl}/paiement/accepterPaiement`;
-  Url4=`${this.baseUrl}/paiement/getAllPaiementValider`;
+  UrlDepot= `${this.baseUrl}/api/paiement/validerPaiement`;
+  url2=`${this.baseUrl}/api/paiement/findVehiculeEnAttente`;
+  Url3=`${this.baseUrl}/api/paiement/accepterPaiement`;
+  Url4=`${this.baseUrl}/api/paiement/getAllPaiementValider`;
   // Url5=`${this.baseUrl}/paiement/sender`;
 
   ValidationPaiement(vehicule: String, prix: number) {

@@ -9,7 +9,7 @@ import { Role } from '../Model/Role';
 export class RoleServiceService {
   private baseUrl = environment.apiUrl;
   constructor(private http:HttpClient){}
-  Url1=  `${this.baseUrl}/role/findRole`;
+  Url1=  `${this.baseUrl}/api/role/findRole`;
 
   getAllRole()
   {

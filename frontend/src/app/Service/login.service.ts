@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
 export class LoginService {
   private baseUrl = environment.apiUrl;
   constructor(private http:HttpClient){}
-  Url=`${this.baseUrl}/auth/signin`;
+  Url=`${this.baseUrl}/api/auth/signin`;
 
   loginUtilisateur(nom:string,mot_de_passe:string){
     let params = new HttpParams();

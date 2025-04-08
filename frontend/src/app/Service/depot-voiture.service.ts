@@ -47,17 +47,17 @@ export const dataURItoBlob = (dataURI: string) => {
 })
 export class DepotVoitureService {
   private baseUrl = environment.apiUrl;
-  private url = `${this.baseUrl}/vehicule/createVehicule`;
+  private url = `${this.baseUrl}/api/vehicule/createVehicule`;
   private httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
   constructor(private http:HttpClient) { }
-  UrlDepot=`${this.baseUrl}/vehicule/createVehicule`;
-  Url2 = `${this.baseUrl}/vehicule/findVoitureClient`;
-  url3 = `${this.baseUrl}/vehicule/findVoitureValide`;
-  Url4 = `${this.baseUrl}/reparation/deleteReparation`;
-  Url5 = `${this.baseUrl}/reparation/findReparationById`;
-  Url6 = `${this.baseUrl}/reparation/listeDepotVoitureParVoiture`;
+  UrlDepot=`${this.baseUrl}/api/vehicule/createVehicule`;
+  Url2 = `${this.baseUrl}/api/vehicule/findVoitureClient`;
+  url3 = `${this.baseUrl}/api/vehicule/findVoitureValide`;
+  Url4 = `${this.baseUrl}/api/reparation/deleteReparation`;
+  Url5 = `${this.baseUrl}/api/reparation/findReparationById`;
+  Url6 = `${this.baseUrl}/api/reparation/listeDepotVoitureParVoiture`;
 
  async depotVoiture (nom: string,type: string, file: File, immatriculation: string, utilisateurId: any){
     const formData = new FormData();

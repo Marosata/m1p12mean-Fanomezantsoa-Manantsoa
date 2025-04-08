@@ -1,81 +1,125 @@
-const config = require("../config/auth.config");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const db = require("../models");
 const Utilisateur = db.utilisateur;
 const Role = db.role;
-
-var jwt = require("jsonwebtoken");
-var bcrypt = require("bcryptjs");
+const config = require("../config/auth.config");
 
 exports.signup = async (req, res) => {
   try {
+    const hashedPassword = bcrypt.hashSync(req.body.mot_de_passe, 10);
+
     const user = new Utilisateur({
       nom: req.body.nom,
       email: req.body.email,
-      mot_de_passe: bcrypt.hashSync(req.body.mot_de_passe, 8),
+      mot_de_passe: hashedPassword,
     });
 
-    const savedUser = await user.save();
-
+    // Gestion des rôles
     if (req.body.roles) {
       const roles = await Role.find({ nom: { $in: req.body.roles } });
-      savedUser.roles = roles.map((role) => role._id);
+      user.roles = roles.map((role) => role._id);
     } else {
-      const role = await Role.findOne({ nom: "client" });
-      savedUser.roles = [role._id];
+      const defaultRole = await Role.findOne({ nom: "client" });
+      user.roles = [defaultRole._id];
     }
 
-    await savedUser.save();
-    res.send({ message: "Utilisateur enregistré avec succès!" });
-  } catch (err) {
-    res.status(500).send({ message: err.message });
+    await user.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Utilisateur enregistré avec succès",
+      data: {
+        id: user._id,
+        nom: user.nom,
+        email: user.email,
+        roles: user.roles,
+      },
+    });
+  } catch (error) {
+    handleAuthError(res, error);
   }
 };
 
 exports.signin = async (req, res) => {
   try {
-    const user = await Utilisateur.findOne({ nom: req.body.nom }).populate(
-      "roles",
-      "-__v"
-    );
+    const user = await Utilisateur.findOne({ nom: req.body.nom })
+      .populate("roles", "nom -_id")
+      .lean();
 
-    if (!user)
-      return res.status(404).send({ message: "Utilisateur non trouvé" });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "Utilisateur non trouvé",
+      });
+    }
 
-    const passwordIsValid = bcrypt.compareSync(
+    const passwordValid = bcrypt.compareSync(
       req.body.mot_de_passe,
       user.mot_de_passe
     );
 
-    if (!passwordIsValid) {
-      return res.status(401).send({ message: "Mot de passe invalide!" });
+    if (!passwordValid) {
+      return res.status(401).json({
+        success: false,
+        message: "Identifiants invalides",
+      });
     }
 
-    const token = jwt.sign({ id: user.id }, config.secret, {
-      expiresIn: 86400,
+    const token = jwt.sign({ id: user._id }, config.secret, {
+      expiresIn: "24h",
     });
+
     const authorities = user.roles.map(
-      (role) => "ROLE_" + role.nom.toUpperCase()
+      (role) => `ROLE_${role.nom.toUpperCase()}`
     );
 
     req.session.token = token;
 
-    res.status(200).send({
-      id: user._id,
-      nom: user.nom,
-      email: user.email,
-      roles: authorities,
-      token: token,
+    res.json({
+      success: true,
+      data: {
+        id: user._id,
+        nom: user.nom,
+        email: user.email,
+        roles: authorities,
+        token: token,
+      },
     });
-  } catch (err) {
-    res.status(500).send({ message: err.message });
+  } catch (error) {
+    handleAuthError(res, error);
   }
 };
 
 exports.signout = async (req, res) => {
   try {
     req.session = null;
-    return res.status(200).send({ message: "Vous vous êtes déconnecter!" });
-  } catch (err) {
-    this.next(err);
+    res.clearCookie("garage-session");
+
+    res.status(200).json({
+      success: true,
+      message: "Déconnexion réussie",
+    });
+  } catch (error) {
+    handleAuthError(res, error);
   }
 };
+
+// Gestion centralisée des erreurs d'authentification
+function handleAuthError(res, error) {
+  console.error("Erreur d'authentification:", error);
+
+  // Gestion des erreurs Mongoose
+  if (error.name === "ValidationError") {
+    return res.status(400).json({
+      success: false,
+      message: "Erreur de validation",
+      errors: Object.values(error.errors).map((e) => e.message),
+    });
+  }
+
+  res.status(500).json({
+    success: false,
+    message: "Erreur serveur lors de l'opération d'authentification",
+  });
+}

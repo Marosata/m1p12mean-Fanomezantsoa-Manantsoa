@@ -55,172 +55,141 @@ exports.findVoitureClient = async (req, res) => {
     res.status(500).send({ message: err.message });
   }
 };
-exports.findVoitureValide = (req, res) => {
-  ///maka voiture rehetra client izay status valide
-  console.log(req.params);
-  Vehicule.find(
-    { status: "valide", utilisateur: req.params.utilisateurId },
-    (err, Vehicule) => {
-      if (err) {
-        res.status(500).send({ message: err });
-        return;
-      }
-      res.send(Vehicule);
+exports.findVoitureValide =  async(req, res) => {
+  try {
+    const findVoitureValide = await Vehicule.find({ status: "valide", utilisateur: req.params.utilisateurId })
+    if (!findVoitureValide){
+      return res.status(404).send({message:"il n'y aps de voiture valide"})
     }
-  );
+    return res.send(findVoitureValide);
+  } catch (error) {
+    return res.status(500).send({ message: err.message });
+  }
 };
-exports.findVehiculeReparationPayer = (req, res) => {
-  //listes voitures rehetra izay valider paiement
-  Vehicule.find({ status: "valide" })
-    .populate(["utilisateur"])
-    .exec((err, Vehicule) => {
-      if (err) {
-        res.status(500).send({ message: err });
-        return;
-      }
-      console.log(req.params);
-      res.send(Vehicule);
-    });
-};
-exports.findVoitureTerminee = (req, res) => {
-  Vehicule.find({ status: "terminee" })
-    .populate("utilisateur")
-    .exec((err, vehicules) => {
-      if (err) {
-        res.status(500).send({ message: err });
-        return;
-      }
-      res.send(vehicules);
-    });
-};
-///maka voiture rehetra client izay status valide
-exports.findVoitureTerminee = (req, res) => {
-  Vehicule.find({ status: "terminee" })
-    .populate("utilisateur")
-    .exec((err, vehicules) => {
-      if (err) {
-        res.status(500).send({ message: err });
-        return;
-      }
-      res.send(vehicules);
-    });
+exports.findVehiculeReparationPayer = async (req, res) => {
+  try {
+    const vehicules = await Vehicule.find({ status: "valide" })
+      .populate("utilisateur")
+      .exec();
+    res.send(vehicules);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
 };
 
-exports.findVoitureBondeSortieValider = (req, res) => {
-  ///maka voiture rehetra client izay status valide
-  console.log(req.params);
-  Vehicule.find({ status: "sortie valider" }, (err, Vehicule) => {
-    if (err) {
-      res.status(500).send({ message: err });
-      return;
-    }
-    res.send(Vehicule);
-  }).populate("utilisateur");
+exports.findVoitureTerminee = async (req, res) => {
+  try {
+    const vehicules = await Vehicule.find({ status: "terminee" })
+      .populate("utilisateur")
+      .exec();
+    res.send(vehicules);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
 };
-exports.updateStatusVehicule = (req, res) => {
-  Vehicule.find({ _id: req.params._id }, (err, vehicule) => {
-    if (err) {
-      return res.status(500).send({ message: err });
-    }
-    console.log(req.params._id);
+
+exports.findVoitureBondeSortieValider = async (req, res) => {
+  try {
+    const vehicules = await Vehicule.find({ status: "sortie valider" })
+      .populate("utilisateur")
+      .exec();
+    res.send(vehicules);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+exports.updateStatusVehicule = async (req, res) => {
+  try {
+    const vehicule = await Vehicule.findById(req.params._id);
+    
     if (!vehicule) {
-      return res.status(404).send({ message: "vehicule not found" });
-    }
-    Vehicule.updateOne(
-      { _id: req.params._id },
-      { $set: { status: "sortie valider" } },
-      function (err, reparation) {
-        if (err) {
-          return res.status(500).send({ message: err });
-        }
-        return res.send({ message: "sortie valider" });
-      }
-    );
-  });
-};
-exports.findVehiculeRecuperer = (req, res) => {
-  ///maka voiture rehetra client izay status sortie valider
-  console.log(req.params);
-  Vehicule.find(
-    { status: "sortie valider", utilisateur: req.params.utilisateurId },
-    (err, Vehicule) => {
-      if (err) {
-        res.status(500).send({ message: err });
-        return;
-      }
-      res.send(Vehicule);
-    }
-  ).populate("utilisateur");
-};
-exports.updateStatusVehiculeRecuperer = (req, res) => {
-  //manova status anle vehicule
-  Vehicule.find({ _id: req.params._id }, (err, vehicule) => {
-    if (err) {
-      return res.status(500).send({ message: err });
-    }
-    console.log(req.params._id);
-    if (!vehicule) {
-      return res.status(404).send({ message: "vehicule not found" });
+      return res.status(404).send({ message: "Véhicule non trouvé" });
     }
 
-    Vehicule.updateOne(
+    await Vehicule.updateOne(
       { _id: req.params._id },
-      { $set: { status: "recuperer" } },
-      function (err, vehicule) {
-        if (err) {
-          return res.status(500).send({ message: err });
-        }
-        return res.send({ message: "recuperer" });
-      }
+      { $set: { status: "sortie valider" } }
     );
-  });
+    
+    res.send({ message: "sortie valider" });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
 };
-exports.findHistoriqueVehicule = (req, res) => {
-  ///maka voiture rehetra client izay status recuperer
-  console.log(req.params);
-  Vehicule.find(
-    { status: "recuperer", utilisateur: req.params.utilisateurId },
-    (err, Vehicule) => {
-      if (err) {
-        res.status(500).send({ message: err });
-        return;
-      }
-      res.send(Vehicule);
+
+exports.findVehiculeRecuperer = async (req, res) => {
+  try {
+    const vehicules = await Vehicule.find({
+      status: "sortie valider",
+      utilisateur: req.params.utilisateurId
+    }).populate("utilisateur");
+    
+    res.send(vehicules);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+exports.updateStatusVehiculeRecuperer = async (req, res) => {
+  try {
+    const vehicule = await Vehicule.findById(req.params._id);
+    
+    if (!vehicule) {
+      return res.status(404).send({ message: "Véhicule non trouvé" });
     }
-  ).populate("utilisateur");
+
+    await Vehicule.updateOne(
+      { _id: req.params._id },
+      { $set: { status: "recuperer" } }
+    );
+    
+    res.send({ message: "recuperer" });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
 };
+
+exports.findHistoriqueVehicule = async (req, res) => {
+  try {
+    const vehicules = await Vehicule.find({
+      status: "recuperer",
+      utilisateur: req.params.utilisateurId
+    }).populate("utilisateur");
+    
+    res.send(vehicules);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
 exports.stats = async (req, res) => {
   try {
     const list = await Vehicule.find({
       $or: [{ status: "terminee" }, { status: "recuperer" }],
     });
-    const data = [];
-    list.forEach((car) => {
-      const vehicleName = car.nom;
-      const timeArr = car.totalTempsReparation.split(",");
-      console.log(timeArr);
+    
+    const data = list.map(car => {
+      const timeArr = car.totalTempsReparation?.split(",") || [];
+      
       const days = timeArr[0] ? parseInt(timeArr[0].replace("j", "")) : 0;
       const hours = timeArr[1] ? parseInt(timeArr[1].replace("h", "")) : 0;
       const minutes = timeArr[2] ? parseInt(timeArr[2].replace("mn", "")) : 0;
       const seconds = timeArr[3] ? parseInt(timeArr[3].replace("s", "")) : 0;
-      console.log(seconds);
-      const totalTime =
-        days * 24 * 60 * 60 + hours * 60 * 60 + minutes * 60 + seconds;
-      console.log(totalTime);
-      const avgTimeInDays = totalTime / (24 * 60 * 60);
-      const avgTimeInHours = totalTime / (60 * 60); //s
-      const avgTimeInMinutes = totalTime / 60;
-      const avgTimeInSeconds = totalTime;
-      data.push({
-        avgTimeInDays,
-        avgTimeInHours,
-        avgTimeInMinutes,
-        avgTimeInSeconds,
-        vehicleName,
-      });
+      
+      const totalTime = days * 86400 + hours * 3600 + minutes * 60 + seconds;
+      
+      return {
+        avgTimeInDays: totalTime / 86400,
+        avgTimeInHours: totalTime / 3600,
+        avgTimeInMinutes: totalTime / 60,
+        avgTimeInSeconds: totalTime,
+        vehicleName: car.nom
+      };
     });
+    
     res.send(data);
   } catch (err) {
-    res.status(500).send({ message: err });
+    res.status(500).send({ message: err.message });
   }
 };

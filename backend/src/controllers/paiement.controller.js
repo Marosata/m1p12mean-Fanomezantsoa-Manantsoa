@@ -54,38 +54,33 @@ exports.findVehiculeEnAttente = async (req, res) => {
     res.status(500).send({ message: err.message });
   }
 };
-exports.accepterPaiement = (req, res) => {
-  // ty no action ataon'ny responsable financier ivalidena anle paiement ao am pageny
-  Vehicule.updateOne(
-    { _id: req.body.vehicule },
-    { $set: { status: "valide" } },
-    (err, vehicule) => {
-      if (err) {
-        return res.status(500).send({ message: err });
-      }
-      if (!vehicule) {
-        return res.status(404).send({ message: "Vehicule not found" });
-      }
-      return res.send({ message: "Paiement Valider avec succes" });
+
+exports.accepterPaiement= async (req,res)=>{
+  try {
+    const vehiculeUpdate = await Vehicule.updateOne(
+      {_id : req.body.vehicule},
+      {$set:{status: "valide"}},
+    );
+    if (!vehiculeUpdate)
+      return res.status(404).send({ message: "Véhicule non trouvé" });
+
+    if (vehicule.status === "valide") {
+      return res
+        .status(400)
+        .send({ message: "Le véhicule est déjà validé" });
     }
-  );
-};
-exports.getAllPaiementValider = (req, res) => {
-  //par status "en attente"
-  Paiement.find({})
-    .populate({
-      path: "vehicule",
-      populate: { path: "utilisateur" },
-      match: { status: "valide" },
-    })
-    .exec((err, paiements) => {
-      if (err) {
-        return res.status(500).send({ message: err });
-      }
-      // Only return the Paiement documents that have a 'valider' status vehicule
-      const paiementsValider = paiements.filter(
-        (paiement) => paiement.vehicule !== null
-      );
-      res.send(paiementsValider);
-    });
-};
+  } catch (error) {
+    res.status(500).send({ message: err.message });
+  }
+}
+
+exports.getAllPaiementValider= async (req,res)=>{
+  try {
+    const paiementsValider = await Paiement.find()
+    if(!paiementsValider){
+      return res.status(404).send({ message: "Il n'y a pas encore de paiement Validé. " });
+    }
+  } catch (error) {
+    res.status(500).send({ message: err.message });
+  }
+}
